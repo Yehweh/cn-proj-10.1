@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sliding Window Protocol – Simplest Simulator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Sliding Window Protocol – Simplest</h1>
+    <nav class="top-menu">
+      <button id="developedByBtn">Developed By</button>
+      <button id="helpBtn">Help</button>
+      <button id="learnBtn">Learn</button>
+      <button id="downloadBtn">Download</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Input Controls -->
+    <section class="controls">
+      <h2>Input Parameters</h2>
+
+      <label>Number of Frames (N):</label>
+      <input type="number" id="numFrames" min="1" value="8" />
+
+      <label>Window Size (W):</label>
+      <input type="number" id="winSize" min="1" value="1" />
+
+      <!-- Frame Delay -->
+      <label>Frame Delay:</label>
+      <select id="frameDelayMode" class="modeSelect">
+        <option value="none">None</option>
+        <option value="random">Random</option>
+        <option value="user">User Defined</option>
+        <option value="kth">Every Kth</option>
+      </select>
+      <div id="frameDelayUserDiv" class="hidden small-input">
+        <label>Frame No. (Delay):</label>
+        <input type="number" id="frameDelayNo" min="1" />
+      </div>
+      <div id="frameDelayKthDiv" class="hidden small-input">
+        <label>Every Kth Frame (Delay):</label>
+        <input type="number" id="frameDelayKth" min="2" value="3" />
+      </div>
+
+      <!-- Frame Lost -->
+      <label>Frame Lost:</label>
+      <select id="frameLostMode" class="modeSelect">
+        <option value="none">None</option>
+        <option value="random">Random</option>
+        <option value="user">User Defined</option>
+        <option value="kth">Every Kth</option>
+      </select>
+      <div id="frameLostUserDiv" class="hidden small-input">
+        <label>Frame No. (Lost):</label>
+        <input type="number" id="frameLostNo" min="1" />
+      </div>
+      <div id="frameLostKthDiv" class="hidden small-input">
+        <label>Every Kth Frame (Lost):</label>
+        <input type="number" id="frameLostKth" min="2" value="3" />
+      </div>
+
+      <!-- ACK Delay -->
+      <label>ACK Delay:</label>
+      <select id="ackDelayMode" class="modeSelect">
+        <option value="none">None</option>
+        <option value="random">Random</option>
+        <option value="user">User Defined</option>
+        <option value="kth">Every Kth</option>
+      </select>
+      <div id="ackDelayUserDiv" class="hidden small-input">
+        <label>ACK No. (Delay):</label>
+        <input type="number" id="ackDelayNo" min="1" />
+      </div>
+      <div id="ackDelayKthDiv" class="hidden small-input">
+        <label>Every Kth ACK (Delay):</label>
+        <input type="number" id="ackDelayKth" min="2" value="3" />
+      </div>
+
+      <!-- ACK Lost -->
+      <label>ACK Lost:</label>
+      <select id="ackLostMode" class="modeSelect">
+        <option value="none">None</option>
+        <option value="random">Random</option>
+        <option value="user">User Defined</option>
+        <option value="kth">Every Kth</option>
+      </select>
+      <div id="ackLostUserDiv" class="hidden small-input">
+        <label>ACK No. (Lost):</label>
+        <input type="number" id="ackLostNo" min="1" />
+      </div>
+      <div id="ackLostKthDiv" class="hidden small-input">
+        <label>Every Kth ACK (Lost):</label>
+        <input type="number" id="ackLostKth" min="2" value="3" />
+      </div>
+
+      <div class="control-buttons">
+        <button id="simulateBtn">Simulate</button>
+        <button id="clearBtn">Clear</button>
+      </div>
+    </section>
+
+    <!-- Diagram -->
+    <section class="diagram">
+      <h2>Timeline Diagram</h2>
+      <div id="canvasWrap">
+        <canvas id="timelineCanvas" width="1200" height="700"></canvas>
+      </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="stats">
+      <h2>Statistics</h2>
+      <table id="statsTable">
+        <tr><th>Window Size</th><td id="statWin">-</td></tr>
+        <tr><th>Total Frames</th><td id="statFrames">-</td></tr>
+        <tr><th>Frames per Unit</th><td id="statFramesPerUnit">-</td></tr>
+        <tr><th>Time per Frame (units)</th><td id="statTimePerFrame">-</td></tr>
+        <tr><th>Frame Delay Mode</th><td id="statFrameDelay">-</td></tr>
+        <tr><th>Frame Lost Mode</th><td id="statFrameLost">-</td></tr>
+        <tr><th>ACK Delay Mode</th><td id="statAckDelay">-</td></tr>
+        <tr><th>ACK Lost Mode</th><td id="statAckLost">-</td></tr>
+        <tr><th>Frames Lost</th><td id="statFramesLost">0</td></tr>
+        <tr><th>ACKs Lost</th><td id="statAcksLost">0</td></tr>
+        <tr><th>Retransmissions</th><td id="statRetrans">0</td></tr>
+        <tr><th>Successful Frames</th><td id="statSuccess">0</td></tr>
+      </table>
+    </section>
+  </main>
+
+  <!-- Popups -->
+  <div id="developedByPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" data-close="developedByPopup">&times;</span>
+      <h2>Developed By</h2>
+      <div class="team-grid">
+        <div>
+          <img src="Subhasri.jpg" alt="Subhasri Balachandiran" />
+          <p><strong>Subhasri Balachandiran – 24BCE1833</strong></p>
+        </div>
+        <div>
+          <img src="Niranjan.jpg" alt="Niranjan Kumar S" />
+          <p><strong>Niranjan Kumar S – 24BCE1769</strong></p>
+        </div>
+        <div>
+          <img src="Ranse.jpg" alt="Ranse Roger J" />
+          <p><strong>Ranse Roger J – 24BCE1531</strong></p>
+        </div>
+      </div>
+      <h3>Mentor</h3>
+      <div class="mentor">
+        <img src="mentor.jpg" alt="Mentor" />
+        <p><strong>Dr. Swaminathan</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="helpPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" data-close="helpPopup">&times;</span>
+      <h2>Help – Step-by-Step Instructions</h2>
+      <div class="scrollable-content">
+        <h3>Project Overview</h3>
+        <p>This project simulates the Sliding Window Protocol, which is used in data communication for efficient and reliable transmission of multiple frames. The simulation allows you to control frame/ACK delays, losses, and window size.</p>
+        
+        <h3>How to Give Input</h3>
+        <ul>
+          <li>Enter the number of frames (N) to be transmitted.</li>
+          <li>Set the window size (W) according to the sliding window protocol.</li>
+          <li>Configure delay/loss modes for frames and ACKs: None, Random, User Defined, or Every Kth.</li>
+          <li>If User Defined or Kth is selected, specify the frame/ACK numbers accordingly.</li>
+        </ul>
+        
+        <h3>How to Execute</h3>
+        <ol>
+          <li>Fill in all required input parameters.</li>
+          <li>Click the "Simulate" button.</li>
+          <li>The timeline diagram will display the transmission of frames and reception of ACKs.</li>
+          <li>Lost frames/ACKs and retransmissions will be highlighted automatically.</li>
+        </ol>
+        
+        <h3>Correct Flow to Execute</h3>
+        <p>1. Input number of frames and window size.<br>
+          2. Set frame/ACK delay and loss modes.<br>
+          3. Click "Simulate" and observe the frame transmissions.<br>
+          4. Check the statistics table for detailed results.</p>
+
+        <h3>What is Processed</h3>
+        <p>The simulation processes the following:</p>
+        <ul>
+          <li>Transmission of frames based on sliding window protocol.</li>
+          <li>Delays and losses as per input configuration.</li>
+          <li>Retransmission of lost frames or ACKs.</li>
+          <li>Visualization of timeline and acknowledgment flow.</li>
+        </ul>
+
+        <h3>How to Interpret the Results</h3>
+        <ul>
+          <li>Timeline Diagram shows frames (blue) and ACKs (green).</li>
+          <li>Red arrows indicate lost frames or ACKs.</li>
+          <li>Statistics table summarizes: total frames, retransmissions, successful frames, lost frames/ACKs, and selected delay/loss modes.</li>
+          <li>Use this information to analyze the efficiency of the sliding window protocol under different conditions.</li>
+        </ul>
+
+        <h3>Graph Interpretation</h3>
+        <p>The timeline diagram represents the flow of frames and ACKs. Each arrow corresponds to a frame or ACK transmission. Lost frames or ACKs are shown with a distinct color (red), and retransmitted frames/ACKs appear with a new arrow in the same sequence.</p>
+
+        <h3>Additional Tips</h3>
+        <ul>
+          <li>Ensure window size &lt;= number of frames for proper simulation.</li>
+          <li>Start with no delay/loss modes to understand basic flow.</li>
+          <li>Gradually add delays or losses to simulate real network conditions.</li>
+        </ul>
+
+        <h3>Reference Materials</h3>
+        <ul>
+          <li>Computer Networks, 5th Edition, Andrew S. Tanenbaum, David J. Wetherall.</li>
+          <li>Data Communications and Networking, 5th Edition, Behrouz A. Forouzan.</li>
+        </ul>
+        
+        <h3>Related Video</h3>
+        <p>Watch this video to understand Sliding Window Protocol visually:</p>
+        <div class="video-container">
+          <iframe width="560" height="315" 
+                  src="https://www.youtube.com/embed/LnbvhoxHn8M?start=178"
+                  title="Sliding Window Protocol Animation" 
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                  allowfullscreen>
+          </iframe>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <div id="learnPopup" class="popup">
+    <div class="popup-content">
+      <span class="close" data-close="learnPopup">&times;</span>
+      <h2>Learn – Sliding Window Protocol</h2>
+
+      <h3>1. Overview</h3>
+      <p>The Sliding Window Protocol is a fundamental data link layer protocol used to ensure reliable transmission of frames between sender and receiver. It allows multiple frames to be sent before waiting for an acknowledgment, improving efficiency and throughput.</p>
+
+      <h3>2. Key Concepts</h3>
+      <ul>
+        <li><strong>Frame:</strong> A unit of data transmission.</li>
+        <li><strong>Window Size (W):</strong> The maximum number of frames that can be sent without receiving an acknowledgment.</li>
+        <li><strong>ACK (Acknowledgment):</strong> Feedback from the receiver confirming successful receipt of frames.</li>
+        <li><strong>Frame Loss:</strong> Frames may be lost due to network errors; retransmission is required.</li>
+        <li><strong>ACK Loss:</strong> ACKs can also be lost; the sender must retransmit frames if acknowledgment is not received within a timeout.</li>
+        <li><strong>Timeout:</strong> A timer that triggers retransmission if no ACK is received within a specified interval.</li>
+      </ul>
+
+      <h3>3. Types of Sliding Window Protocols</h3>
+      <ol>
+        <li><strong>Sliding window Protocol- Simplest: </strong>It allows efficient use of the network by keeping several frames “in transit” at once.</li>
+        <li><strong>Stop And Wait ARQ:</strong>The sender sends one frame at a time and waits for an acknowledgment (ACK) before sending the next frame.</li>
+        <li><strong>Go-Back-N ARQ:</strong> Sender can send several frames without waiting for ACK, but retransmits all frames from a lost frame onward if an error occurs.</li>
+        <li><strong>Selective Repeat ARQ:</strong> Only the lost frame is retransmitted, making it more efficient but more complex.</li>
+      </ol>
+
+      <h3>4. Advantages</h3>
+      <ul>
+        <li>Efficient use of network bandwidth.</li>
+        <li>Supports error control through acknowledgments and retransmissions.</li>
+        <li>Reduces idle time compared to stop-and-wait protocols.</li>
+      </ul>
+
+      <h3>5. Animated Video:</h3>
+      <p>Watch an animation explaining Sliding Window Protocol here: 
+        <p>Watch an animation explaining Sliding Window Protocol here:</p>
+        <div class="video-container">
+          <iframe width="560" height="315" 
+                  src="https://www.youtube.com/embed/LnbvhoxHn8M?start=178"
+                  title="Sliding Window Protocol Video"
+                  frameborder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen>
+          </iframe>
+        </div>
+
+      </p>
+
+      <h3>6. References</h3>
+      <ul>
+        <li>Behrouz A. Forouzan, <em>Data Communications and Networking</em>, 5th Edition, McGraw-Hill, 2012.</li>
+        <li>Andrew S. Tanenbaum, <em>Computer Networks</em>, 5th Edition, Pearson, 2011.</li>
+        <li>William Stallings, <em>Data and Computer Communications</em>, 10th Edition, Pearson, 2013.</li>
+        <li>Online Resource: <a href="https://www.geeksforgeeks.org/computer-networks/sliding-window-protocol-set-1/" target="_blank">GeeksforGeeks – Sliding Window Protocol</a></li>
+        <li>Online Resource: <a href="https://www.youtube.com/watch?v=LnbvhoxHn8M&t=178s" target="_blank">YouTube Animation – Sliding Window Protocol</a></li>
+      </ul>
+
+      <h3>7. Notes</h3>
+      <p>This section is intended for learning purposes. For detailed textbook exercises and examples, refer to the prescribed textbooks mentioned above.</p>
+    </div>
+  </div>
+
+
+  <!-- libs (optional for download feature) -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

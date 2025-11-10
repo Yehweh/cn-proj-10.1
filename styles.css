@@ -1,0 +1,378 @@
+:root {
+  --bg1: #030712;
+  --bg2: #0a0f1f;
+  --glass: rgba(255,255,255,0.06);
+  --border: rgba(255,255,255,0.10);
+  --accent: #00ffff;
+  --text: #eafaff;
+  --muted: #a9c2d6;
+  --blue: #4faaff;
+  --cyan: #00ffff;
+  --red: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+}
+body {
+  font-family: Inter, system-ui, Segoe UI, Roboto, Helvetica, Arial;
+  background:
+    radial-gradient(900px 500px at 12% 10%, #063149 0%, transparent 40%),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  color: var(--text);
+}
+
+/* Container Layout */
+main.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Glass Panels */
+section {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px) saturate(150%);
+  border-radius: 16px;
+  box-shadow: 0 0 28px rgba(0,255,255,0.08);
+  padding: 22px 24px;
+  width: 100%;
+  margin-bottom: 0px;
+}
+
+/* Section Headers */
+section h2 {
+  color: var(--accent);
+  font-size: 1.35rem;
+  border-bottom: 2px solid var(--cyan);
+  padding-bottom: 10px;
+  margin-bottom: 18px;
+  text-shadow: 0 0 8px rgba(0,255,255,0.19);
+}
+
+/* Header + Top Nav */
+header {
+  background: var(--glass);
+  color: var(--accent);
+  padding: 16px 18px 24px;
+  text-align: center;
+  border-bottom: 1.3px solid var(--cyan);
+  box-shadow: 0 2px 16px rgba(0,255,255,0.18);
+  border-radius: 0 0 18px 18px;
+}
+
+header h1 {
+  color: var(--accent);
+  font-size: 1.7rem;
+  font-weight: 600;
+  text-shadow: 0 0 12px rgba(0,255,255,0.45);
+}
+
+.top-menu {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.top-menu button {
+  background: linear-gradient(180deg, #0ef, #09c9d3);
+  color: #061726;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 1rem;
+  box-shadow: 0 4px 16px rgba(0,255,255,0.28);
+  transition: transform .15s, box-shadow .15s;
+}
+
+.top-menu button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0,255,255,.45);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Input Controls */
+.controls label {
+  color: var(--muted);
+  font-weight: 700;
+  margin: 16px 0 7px;
+  text-align: left;
+  font-size: 0.96rem;
+  letter-spacing: .01em;
+  opacity: .96;
+}
+
+.controls input,
+.controls select {
+  width: 100%;
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.28);
+  font-size: 1rem;
+  padding: 10px 12px;
+  outline: none;
+  transition: border .18s;
+}
+
+.controls input:focus,
+.controls select:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 2px rgba(0,255,255,0.35);
+}
+
+.controls input::placeholder {
+  color: #cfe8ffaa;
+  opacity: .85;
+}
+
+.control-buttons {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.control-buttons button {
+  background: linear-gradient(180deg,#0ef,#00b8ff);
+  color: #01242d;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(0,255,255,0.36);
+  margin: 5px;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.control-buttons button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 20px rgba(0,255,255,.45);
+  background: linear-gradient(180deg, #0ef, #09dfff);
+}
+
+/* Diagram */
+.diagram {
+  text-align: center;
+}
+
+#canvasWrap {
+  overflow-x: auto;
+  padding: 10px 0;
+  background: var(--glass);
+  border-radius: 14px;
+  border: 1px solid var(--border);
+}
+
+#timelineCanvas {
+  border: 1px solid var(--border);
+  margin-top: 10px;
+  border-radius: 14px;
+  background: #10273a;
+  box-shadow: 0 2px 20px rgba(0,255,255,0.09);
+}
+
+/* Statistics Section */
+.stats {
+  text-align: left;
+}
+
+.stats table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.99rem;
+  background: var(--glass);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.stats th, .stats td {
+  text-align: left;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.stats th {
+  color: var(--muted);
+  width: 55%;
+  font-weight: 700;
+}
+
+.stats td {
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: .02em;
+}
+
+/* --- Responsive --- */
+@media (max-width: 700px) {
+  main.container {
+    padding: 10px;
+  }
+  .controls input, .controls select {
+    font-size: 0.9rem;
+  }
+  #timelineCanvas {
+    width: 100%;
+  }
+}
+
+/* --- Popups --- */
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 34, 59, 0.66);
+  backdrop-filter: blur(10px);
+}
+
+.popup-content {
+  background: var(--bg2);
+  margin: 8% auto;
+  padding: 32px;
+  border-radius: 18px;
+  width: 85%;
+  max-width: 600px;
+  position: relative;
+  box-shadow: 0 4px 22px rgba(0,255,255,0.22);
+  border: 2px solid var(--glass);
+  color: var(--text);
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 26px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.22s;
+}
+
+.close:hover {
+  color: var(--cyan);
+}
+
+/* Developed By Popup Content */
+.team-grid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  gap: 30px;
+}
+.team-grid div {
+  text-align: center;
+}
+.team-grid img, .mentor img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid var(--cyan);
+  box-shadow: 0 2px 15px rgba(0,255,255,0.13);
+}
+.team-grid p {
+  margin-top: 9px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.mentor {
+  text-align: center;
+  margin-top: 23px;
+}
+.mentor p {
+  margin-top: 8px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+/* --- Scrollable Popup --- */
+#developedByPopup .popup-content {
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyan) #10273a;
+}
+#developedByPopup .popup-content::-webkit-scrollbar {
+  width: 8px;
+}
+#developedByPopup .popup-content::-webkit-scrollbar-thumb {
+  background: var(--cyan);
+  border-radius: 5px;
+}
+#developedByPopup .popup-content::-webkit-scrollbar-track {
+  background: #10273a;
+}
+/* small helper for inline dynamic inputs */
+.small-input { margin-top: 8px; margin-bottom: 8px; }
+.modeSelect { margin-bottom: 8px; }
+.controls input,
+.controls select { margin-bottom: 10px; }
+
+/* Keep select box glassy */
+.controls select {
+  background: rgba(255, 255, 255, 0.12); /* glassy like before */
+  color: var(--text); /* default select text color */
+  border: 1px solid rgba(255, 255, 255, 0.28);
+}
+
+/* Change text color inside dropdown options */
+.controls select option {
+  color: #0044cc; /* blue text */
+  background-color: #ffffff; /* white background */
+}
+
+/* Optional: hover effect for dropdown options (modern browsers) */
+.controls select option:hover {
+  background-color: rgba(0, 255, 255, 0.1); /* light cyan glassy hover */
+  color: #00ffff; /* accent color on hover */
+}
+.popup-content {
+  max-height: 80vh;        /* limits the height */
+  overflow-y: auto;        /* enables vertical scrolling */
+}
+.popup-content a {
+  color: #00ffff; /* Cyan */
+  text-decoration: underline; /* Optional, makes it clear it’s a link */
+}
+
+.popup-content a:hover {
+  color: #00ccff; /* Slightly darker cyan on hover */
+}
